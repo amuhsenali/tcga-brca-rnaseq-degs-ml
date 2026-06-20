@@ -1,16 +1,59 @@
-# TCGA-BRCA RNA-seq Differential Expression and Machine Learning Analysis
+# 🧬 TCGA-BRCA RNA-seq Differential Expression and Machine Learning Analysis
+
+![Pipeline](https://img.shields.io/badge/pipeline-Weblem--3-blueviolet)
+![Language](https://img.shields.io/badge/language-R-blue)
+![Dataset](https://img.shields.io/badge/dataset-TCGA--BRCA-pink)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+
+
+```
 
 **Ahmed Mohsin Ali¹**
-
 ¹Department of Computer Science, Jamia Millia Islamia, Jamia Nagar, New Delhi, India, 110025
+
+*"2,384 genes whispering the same story — from raw counts to a 100%-accurate signature."*
+
+A full transcriptomic pipeline on TCGA-BRCA: differential expression, functional enrichment, and machine learning–based biomarker discovery in breast invasive carcinoma.
 
 ---
 
-## 1. Overview
+## 📑 Table of Contents
+- [Overview](#-overview)
+- [The Pipeline at a Glance](#-the-pipeline-at-a-glance)
+- [Dataset](#-dataset)
+- [Key Results](#-key-results)
+- [Repository Structure](#-repository-structure)
+- [Requirements](#-requirements)
+- [How to Run](#-how-to-run)
+- [Citation](#-citation)
+- [License](#-license)
+- [Contact](#-contact)
 
-End-to-end RNA-seq analysis of TCGA-BRCA data covering QC, normalization, differential expression, functional enrichment, and ML-based biomarker ranking. 2,384 significant DEGs identified; Random Forest, LASSO, and SVM models achieved >96% classification accuracy (AUC ≈ 1.0).
+---
 
-## 2. Dataset
+## 🔬 Overview
+
+213 breast tissue samples. 60,660 genes. One question: **what separates tumor from normal at the transcriptome level — and can a handful of genes predict it?**
+
+This pipeline runs the full arc from raw RNA-seq counts to a validated, ML-ranked biomarker signature: quality control → normalization → differential expression → functional enrichment → classification.
+
+> 🎯 **The headline result:** a 10-gene signature classifies tumor vs. normal with up to **100% accuracy** (LASSO) and **AUC ≈ 1.0** across all three models tested.
+
+## 🗺️ The Pipeline at a Glance
+
+```mermaid
+flowchart LR
+    A[📥 Data Acquisition<br/>TCGA-BRCA, STAR counts] --> B[🧹 Quality Control<br/>STAR two-pass, GRCh38]
+    B --> C[⚖️ Normalization<br/>DESeq2 + TPM]
+    C --> D[📉 Differential Expression<br/>DESeq2: Tumor vs Normal]
+    D --> E[🧭 Functional Enrichment<br/>GO / KEGG / DO]
+    D --> F[🤖 Machine Learning<br/>RF · LASSO · SVM]
+    E --> G[📈 Biomarker Signature]
+    F --> G
+```
+
+## 🧫 Dataset
 
 | Detail | Value |
 |---|---|
@@ -19,25 +62,31 @@ End-to-end RNA-seq analysis of TCGA-BRCA data covering QC, normalization, differ
 | Genes (raw) | 60,660 |
 | Genes tested (post-filter) | 25,571 |
 
-## 3. Pipeline
+## 📊 Key Results
 
-Acquisition → QC (STAR two-pass, GRCh38) → Normalization (DESeq2 size factors + TPM) → DEG analysis (|log2FC| ≥ 2, p ≤ 0.05) → Enrichment (GO/KEGG/DO via clusterProfiler) → ML (RF, LASSO, SVM)
+### By the Numbers
 
-## 4. Key Results
+| 🧬 Significant DEGs | ⬆️ Upregulated | ⬇️ Downregulated | 🎯 Best Accuracy | 📐 Best AUC |
+|---|---|---|---|---|
+| **2,384** | **1,135** | **1,249** | **100% (LASSO)** | **≈1.0** |
 
-- **2,384 significant DEGs** (1,135 up / 1,249 down)
-- Top pathways: cell cycle, mitotic spindle organization, DNA replication, PI3K–Akt, p53 signaling
-- Model performance:
+### Top Enriched Pathways
+
+Cell cycle regulation · DNA replication · PI3K–Akt signaling · p53 signaling — all hallmarks of breast tumor progression.
+
+### Model Showdown
 
 | Model | Accuracy | Sensitivity | Specificity | AUC |
 |---|---|---|---|---|
 | Random Forest | 0.9683 | 0.9394 | 1.000 | 1.000 |
-| LASSO | 1.0000 | 1.0000 | 1.000 | 1.000 |
+| 🏆 **LASSO** | **1.0000** | **1.0000** | **1.000** | **1.000** |
 | SVM | 0.9841 | 0.9697 | 1.000 | 1.000 |
 
-- Top biomarker candidates: **VEGFD, MMP11, COL10A1, UBE2T, NEK2**
+### Top Biomarker Candidates
 
-## 5. Repository Structure
+**VEGFD · MMP11 · COL10A1 · UBE2T · NEK2** — ranked by combined Random Forest importance and LASSO coefficient.
+
+## 📁 Repository Structure
 
 ```
 tcga-brca-rnaseq-degs-ml/
@@ -50,11 +99,15 @@ tcga-brca-rnaseq-degs-ml/
 └── README.md
 ```
 
-## 6. Requirements
+## ⚙️ Requirements
 
-R 4.4.2 + key packages: `DESeq2`, `edgeR`, `limma`, `clusterProfiler`, `enrichplot`, `DOSE`, `org.Hs.eg.db`, `TCGAbiolinks`, `ggplot2`, `pheatmap`, `ComplexHeatmap`, `caret`, `randomForest`, `glmnet`, `pROC`, `tidyverse`, `biomaRt`, `pathview`.
-
-Full session details: [`sessionInfo.txt`](./sessionInfo.txt)
+| Tool | Role |
+|---|---|
+| DESeq2 | Normalization & differential expression |
+| clusterProfiler | GO / KEGG / Disease Ontology enrichment |
+| caret, randomForest, glmnet | Machine learning (RF, LASSO) |
+| pROC | ROC / AUC evaluation |
+| ggplot2, pheatmap, ComplexHeatmap | Visualization |
 
 ```r
 install.packages("BiocManager")
@@ -65,7 +118,7 @@ install.packages(c("ggplot2","pheatmap","caret","randomForest","glmnet",
                     "pROC","tidyverse"))
 ```
 
-## 7. How to Run
+## 🚀 How to Run
 
 ```bash
 git clone https://github.com/amuhsenali/tcga-brca-rnaseq-degs-ml.git
@@ -73,16 +126,16 @@ cd tcga-brca-rnaseq-degs-ml
 Rscript scripts/tcga_brca_rnaseq_analysis.R
 ```
 
-> Raw TCGA-BRCA data is not redistributed here; the script downloads it directly via `TCGAbiolinks` from the [GDC Data Portal](https://portal.gdc.cancer.gov/).
+> 📦 Raw TCGA-BRCA data isn't redistributed here — the script pulls it directly via `TCGAbiolinks` from the [GDC Data Portal](https://portal.gdc.cancer.gov/).
 
-## 8. Citation
+## 📖 Citation
 
 > Ali, A. M. (2026). *TCGA-BRCA RNA-seq Differential Expression and Machine Learning Analysis* [Computer software]. GitHub. https://github.com/amuhsenali/tcga-brca-rnaseq-degs-ml
 
-## 9. License
+## 📄 License
 
 MIT License — see [`LICENSE`](./LICENSE).
 
-## 10. Contact
+## ✉️ Contact
 
 **Ahmed Mohsin Ali**
