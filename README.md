@@ -6,7 +6,11 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
-
+```
+ ___ ___ ___    _      ___ ___  _____   _
+| _ )_ _/ __|  /_\    | _ )  \ / / __| / |
+| _ \| | (__  / _ \   | _ \ |) | (__   | |
+|___/___\___|/_/ \_\  |___/___/ \___|  |_|
 ```
 
 **Ahmed Mohsin Ali¹**
@@ -44,12 +48,12 @@ This pipeline runs the full arc from raw RNA-seq counts to a validated, ML-ranke
 
 ```mermaid
 flowchart LR
-    A[📥 Data Acquisition<br/>TCGA-BRCA, STAR counts] --> B[🧹 Quality Control<br/>STAR two-pass, GRCh38]
-    B --> C[⚖️ Normalization<br/>DESeq2 + TPM]
-    C --> D[📉 Differential Expression<br/>DESeq2: Tumor vs Normal]
-    D --> E[🧭 Functional Enrichment<br/>GO / KEGG / DO]
-    D --> F[🤖 Machine Learning<br/>RF · LASSO · SVM]
-    E --> G[📈 Biomarker Signature]
+    A["📥 Data Acquisition<br/>TCGA-BRCA, STAR counts"] --> B["🧹 Quality Control<br/>STAR two-pass, GRCh38"]
+    B --> C["⚖️ Normalization<br/>DESeq2 + TPM"]
+    C --> D["📉 Differential Expression<br/>Tumor vs Normal"]
+    D --> E["🧭 Functional Enrichment<br/>GO / KEGG / DO"]
+    D --> F["🤖 Machine Learning<br/>RF, LASSO, SVM"]
+    E --> G["📈 Biomarker Signature"]
     F --> G
 ```
 
